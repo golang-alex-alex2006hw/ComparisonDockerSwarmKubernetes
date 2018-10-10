@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+   samba:
+       image: 127.0.0.1:5000/samba
+       build: sambaonly
+       init: true
+       stdin_open: true
+       ports:
+           - "445:445"

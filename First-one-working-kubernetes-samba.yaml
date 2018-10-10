@@ -1,0 +1,43 @@
+# https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/
+# https://kubernetes.io/docs/tutorials/hello-minikube/#create-a-deployment
+# https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+# a Service - something accessible; can be handled by multiple actual instances of the app
+kind: Service
+apiVersion: v1
+metadata:
+  name: samba
+  labels:
+    app: samba
+spec:
+  ports:
+    - port: 445
+      targetPort: 445
+  selector:
+    app: samba
+
+---
+
+# a Deployment - creates instances of the app and keeps them running
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samba
+  labels:
+    app: samba
+spec:
+  selector:
+    matchLabels:
+      app: samba
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: samba
+    spec:
+      containers:
+        - image: 127.0.0.1:5000/samba:latest
+          name: samba
+          ports:
+            - containerPort: 445
+          stdin: true
+
